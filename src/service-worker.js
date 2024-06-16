@@ -3,26 +3,14 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-import { build, files, version } from '$service-worker';
 // Create a unique cache name for this deployment
-const CACHE = `cache-${version}`;
-
-const ASSETS = [
-	...build, // the app itself
-	...files  // everything in `static`
-];
+const CACHE = `cache-model-final-v1`;
 
 
-self.addEventListener('install', (event) => {
-
-	console.log('hi added');
-	// Create a new cache and add all files to it
-	async function addFilesToCache() {
-		const cache = await caches.open(CACHE);
-		await cache.addAll(ASSETS);
-	}
-
-	event.waitUntil(addFilesToCache());
+self.addEventListener('install', function(event) {
+	event.waitUntil(
+		caches.open(CACHE)
+	);
 });
 
 self.addEventListener('activate', (event) => {
@@ -36,52 +24,26 @@ self.addEventListener('activate', (event) => {
 	event.waitUntil(deleteOldCaches());
 });
 
-self.addEventListener('fetch', (event) => {
-	// ignore POST requests etc
-	if (event.request.method !== 'GET') return;
+self.addEventListener('fetch', async function(event) {
+	const url = event.request.url;
 
-	async function respond() {
-		const url = new URL(event.request.url);
-		const cache = await caches.open(CACHE);
-
-		// `build`/`files` can always be served from the cache
-		if (ASSETS.includes(url.pathname)) {
-			console.log('hi');
-			const response = await cache.match(url.pathname);
-
-			if (response) {
-				return response;
-			}
-		}
-
-		// for everything else, try the network first, but
-		// fall back to the cache if we're offline
+	// Check if the request is for your model file from your own origin
+	if (url.endsWith('.glb')) {
 		try {
-			const response = await fetch(event.request);
-
-			// if we're offline, fetch can return a value that is not a Response
-			// instead of throwing - and we can't pass this non-Response to respondWith
-			if (!(response instanceof Response)) {
-				throw new Error('invalid response from fetch');
+			const cachedResponse = await caches.match(event.request);
+			if (cachedResponse) {
+				return cachedResponse;
 			}
 
-			if (response.status === 200) {
-				cache.put(event.request, response.clone());
-			}
-
-			return response;
-		} catch (err) {
-			const response = await cache.match(event.request);
-
-			if (response) {
-				return response;
-			}
-
-			// if there's no cache, then just error out
-			// as there is nothing we can do to respond to this request
-			throw err;
+			const networkResponse = await fetch(event.request);
+			const cache = await caches.open(CACHE);
+			await cache.put(event.request, networkResponse.clone());
+			return networkResponse;
+		} catch (error) {
+			console.error('Error caching model:', error);
+			return new Response('Failed to cache model');
 		}
 	}
-
-	event.respondWith(respond());
+	// Handle other requests (if applicable)
+	return new Response('Not found');
 });
