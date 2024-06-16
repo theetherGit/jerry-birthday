@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { ContactShadows, Grid, OrbitControls } from '@threlte/extras'
-  import BirthdayScene from "./models/birthday-set.svelte";
+  import { ContactShadows, OrbitControls } from '@threlte/extras'
+  import BirthdayScene from "./models/birthday-set-final.svelte";
 </script>
 
 <T.PerspectiveCamera
