@@ -6,7 +6,7 @@ export const GET: RequestHandler = async ({params, fetch}) => {
 		if (response && response.ok) {
 			return new Response(response.body, {
 				headers: new Headers({
-					'Cache-control': `max-age=${60*60*24*30}`
+					'Cache-control': `max-age=${60*60*24*30}, public`
 				})
 			})
 		}
