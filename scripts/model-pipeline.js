@@ -14,7 +14,7 @@ const configuration = {
   sourceDir: resolve(join('blender', 'models')),
   targetDir: resolve(join('src', 'lib', 'components', 'models')),
   overwrite: false,
-  root: 'https://cdn.theether.in/',
+  root: '/models/',
   types: true,
   keepnames: false,
   meta: false,

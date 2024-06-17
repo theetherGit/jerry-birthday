@@ -1214,7 +1214,7 @@ Command: npx @threlte/gltf@2.0.3 /Users/shivam/Projects/jerry-birthday/blender/m
     }
   }
 
-  const gltf = useGltf<GLTFResult>('https://cdn.theether.in/birthday-set-final.glb')
+  const gltf = useGltf<GLTFResult>('/models/birthday-set-final.glb')
   export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
 
   const component = forwardEventHandlers()
