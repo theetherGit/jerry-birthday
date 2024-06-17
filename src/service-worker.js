@@ -45,7 +45,7 @@ self.addEventListener('fetch', async function(event) {
 
 			const cachedResponse = await cache.match(event.request);
 			console.log(cachedResponse);
-			if (cachedResponse.ok) {
+			if (cachedResponse) {
 				console.log('hj');
 				return cachedResponse;
 			}
