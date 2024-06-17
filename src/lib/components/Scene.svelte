@@ -7,18 +7,21 @@
   const {scene: CanvasScene} = useThrelte()
   CanvasScene.background = new Color('darkslategrey');
   const isMobile = window.innerWidth <= 768
-  const viewPort: [x: number, y: number, z:number] = isMobile ? [50, 20, -10] : [30, 7, -15]
+  const viewPort: [x: number, y: number, z:number] = isMobile ? [100, 30, -10] : [30, 7, -15]
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={viewPort}
   fov={15}
-  zoom={0.8}
+  zoom={isMobile ? 0.7 : 0.6}
 >
   <OrbitControls
-    maxPolarAngle={2}
-    maxAzimuthAngle={10}
+    minPolarAngle={1}
+    maxPolarAngle={1.5}
+    minAzimuthAngle={1.5}
+    maxAzimuthAngle={3}
+    maxDistance={isMobile ? 45 : 20}
     enableZoom={true}
     enableDamping
     target.y={isMobile ? 1 : 1.5}
