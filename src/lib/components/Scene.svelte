@@ -1,20 +1,28 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core';
   import { ContactShadows, OrbitControls } from '@threlte/extras'
   import BirthdayScene from "./models/birthday-set-final.svelte";
+  import { Color } from 'three';
+
+  const {scene: CanvasScene} = useThrelte()
+  CanvasScene.background = new Color('darkslategrey');
+  const isMobile = window.innerWidth <= 768
+  const viewPort: [x: number, y: number, z:number] = isMobile ? [50, 20, -10] : [30, 7, -15]
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[40, 10, -10]}
+  position={viewPort}
   fov={15}
+  zoom={0.8}
 >
   <OrbitControls
     maxPolarAngle={2}
     maxAzimuthAngle={10}
     enableZoom={true}
     enableDamping
-    target.y={1.5}
+    target.y={isMobile ? 1 : 1.5}
+    target.x={4}
   />
 </T.PerspectiveCamera>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
+  import { Canvas } from '@threlte/core';
   import Scene from './Scene.svelte'
   import { useProgress } from '@threlte/extras';
   import { tweened } from 'svelte/motion';
@@ -10,6 +10,7 @@
     duration: 800
   })
   $: tweenedProgress.set($progress)
+
 </script>
 
 {#if $tweenedProgress < 1}
@@ -30,7 +31,7 @@
 {/if}
 
 
-<Canvas>
+<Canvas colorManagementEnabled>
   <Scene />
 </Canvas>
 
@@ -50,7 +51,7 @@
     gap: 0.25rem;
     align-items: center;
     justify-content: center;
-    background: #0c121e;
+    background: #2f4f4f;
     color: white;
   }
   .loading {
